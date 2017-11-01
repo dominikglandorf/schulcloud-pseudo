@@ -1,0 +1,8 @@
+{
+  "name": "schulcloud-pseudo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dominikglandorf/schulcloud-pseudo.git",
+  "author": "bossaron / schnickmick",
+  "license": "MIT"
+}
