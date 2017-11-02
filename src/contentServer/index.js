@@ -3,7 +3,6 @@ const express = require('express'),
   app = express();
 
 app.get("/", (req, res) => {
-  console.log(req.query);
   res.send(`Content for user with token ${req.query.token}`);
 });
 

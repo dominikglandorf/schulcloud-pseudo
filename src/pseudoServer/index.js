@@ -1,43 +1,31 @@
 const express = require('express'),
-      app = express(),
+      app   = express(),
       axios = require('axios'),
-      uuid = require('uuid/v4');
+      uuid  = require('uuid/v4'),
+      jwt   = require("jsonwebtoken"),
+      config = require("./config");
 
-const tokens = {}
-const users = {}
+const { api, pseudonym } = config;
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:8081',
-});
-
-app.use(express.urlencoded({
-  extended: false
-}));
+app.use(express.urlencoded({extended: false}));
 app.use(express.static(__dirname));
 
-app.post('/content', (req, res) => {
-  const { username:user } = req.body;
-  console.log(user)
+const a = fn => (...args) => fn(...args).catch(args[args.length - 1]);
 
-  let token
-  if (!(user in tokens)) {
-    token = uuid()
-    tokens[user] = token
-    users[token] = user
-  } else {
-    token = tokens[user]
-  }
+app.post('/content', a(async (req, res) => {
+  const { token } = req.body;
+  
+  if(!token) res.sendStatus(400);
 
-  api.get('/', {
-    params: {
-      token
-    }
-  }).then(result => {
-    res.status(200).send(result.data)
-  }).catch(err => {
-    console.log(err)
-  })
-});
+  const user = pseudonym.insert({
+    username,
+    token: uuid(),
+  });
+
+  res.status(200).send((await api.get('/', { params: {
+    token: user.token
+  }})).data)
+}));
 
 app.listen(8080, () => {
   console.log('server listening on port 8080')

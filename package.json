@@ -9,6 +9,8 @@
     "axios": "^0.17.0",
     "express": "^4.16.2",
     "ims-lti": "^3.0.2",
+    "jsonwebtoken": "^8.1.0",
+    "lokijs": "^1.5.1",
     "uuid": "^3.1.0"
   },
   "scripts": {
