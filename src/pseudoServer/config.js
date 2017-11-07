@@ -13,7 +13,8 @@ try {
 }
 
 const api = {
-    baseURL: "http://127.0.0.1:8081"
+    // baseURL: "http://127.0.0.1:8081"
+    baseURL: "http://ltiapps.net/test/tp.php"
 }
 
 const db = new loki(path.join(__dirname, "db/tokens.db"), {
