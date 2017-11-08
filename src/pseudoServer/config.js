@@ -9,16 +9,15 @@ try {
     fs.statSync(DB_DIR);
 } catch (e) {
     fs.mkdirSync(DB_DIR);
-    fs.writeFileSync(path.join(DB_DIR, "tokens.db"), "{}");
+    fs.writeFileSync(path.join(DB_DIR, "tokens.db"), "");
 }
 
 const api = {
-    // baseURL: "http://127.0.0.1:8081"
-    baseURL: "http://ltiapps.net/test/tp.php"
+    baseURL: "http://127.0.0.1:8081/"
+    // baseURL: 'http://ltiapps.net/test/tp.php'
 }
 
 const db = new loki(path.join(__dirname, "db/tokens.db"), {
-    autoload: true,
     adapter: new (require("lokijs/src/loki-fs-structured-adapter"))(),
     autosave: true,
     autosaveInterval: 5000,
