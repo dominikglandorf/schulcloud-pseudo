@@ -8,8 +8,7 @@ const express = require('express'),
       jwt   = require("jsonwebtoken"),
       OAuth = require('oauth-1.0a'),
       config = require("./config"),
-      crypto = require('crypto'),
-      queryString = require('querystring');
+      crypto = require('crypto');
 
 const { api, pseudonym } = config;
 
@@ -18,8 +17,13 @@ app.use(express.static(__dirname));
 
 const a = fn => (...args) => fn(...args).catch(args[args.length - 1]);
 
-app.get("/token", (req, res) => {
-
+app.get("/user", (req, res) => {
+  res.status(200).send({
+    user: pseudonym.find().map(({username, token}) => ({
+      username, 
+      token,
+    })),
+  });
 });
 
 app.post('/content', a(async (req, res) => {
@@ -27,10 +31,14 @@ app.post('/content', a(async (req, res) => {
   
   if(!username) res.sendStatus(400);
 
-  const user = pseudonym.insert({
-    username,
-    token: uuid(),
-  });
+  const result = pseudonym.findOne({username});
+
+  const user = result !== null 
+    ? result 
+    : pseudonym.insert({
+        username,
+        token: uuid(),
+      });
 
   const consumerKey = 'jisc.ac.uk'
   const consumerSecret = 'secret'
@@ -53,22 +61,21 @@ app.post('/content', a(async (req, res) => {
     }
   });
 
-  console.log(api)
- let request = {
+  //console.log(api)
+  let request = {
     method: 'POST',
     url: api.defaults.baseURL,
     data: payload
   };
 
-  console.log(request)
   const signed_params = oAuthToken.authorize(request);
-  console.log(signed_params)
 
-  axios.post(api.defaults.baseURL, queryString.stringify(signed_params),
-    {'content-type': 'application/x-www-form-urlencoded'}
-  ).then(response => {
+  api.post("/", signed_params)
+  .then(response => {
     res.status(200).send(response.data)
-  });
+  }).catch(err => {
+    console.log(err.message)
+  })
 }));
 
 app.listen(8080, () => {

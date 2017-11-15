@@ -5,10 +5,10 @@ const express = require('express'),
 
 const consumerSecret = 'secret';
 
+app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.post("/", (req, res) => {
-  console.log(req)
   const consumerKey = req.body.oauth_consumer_key;
   if (typeof consumerKey === 'undefined' || consumerKey === null) {
     res.send('Must specify oauth_consumer_key in request.');
