@@ -27,5 +27,5 @@ app.post("/", (req, res) => {
 
 const port = 8081;
 app.listen(port, function() {
-  console.log(`listening on ${port}`);
+  console.log(`Dummy content server listening on ${port}`);
 });
