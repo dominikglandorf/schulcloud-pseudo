@@ -6,7 +6,7 @@
   "author": "bossaron / schnickmick",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.17.0",
+    "axios": "^0.18.0",
     "express": "^4.16.2",
     "ims-lti": "^3.0.2",
     "jsonwebtoken": "^8.1.0",
